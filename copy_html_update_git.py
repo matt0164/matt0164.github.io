@@ -1,5 +1,12 @@
+import os
 import subprocess
 
+# Set GIT_SSH_COMMAND to use your SSH key
+os.environ['GIT_SSH_COMMAND'] = 'ssh -i /Users/mattalevy/.ssh/id_ed25519'
+
+# Run your git commands
+result = subprocess.run(['git', 'push'], capture_output=True, text=True)
+print(result.stdout, result.stderr)
 
 def commit_to_github():
     try:
