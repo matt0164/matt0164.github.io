@@ -1,2 +1,5 @@
 2025-02-17 05:56:06,471 [INFO] Git remote URL updated to SSH format.
 2025-02-17 05:56:06,472 [INFO] Copied /Users/mattalevy/PycharmProjects/snow-plots/html/index.html to /Users/mattalevy/PycharmProjects/matt0164.github.io/index.html
+2025-02-17 05:56:06,495 [INFO] Staged all changes.
+2025-02-17 05:56:06,535 [INFO] Changes committed with message 'Automated commit'.
+2025-02-17 05:56:07,234 [ERROR] An error occurred: Command '['git', 'push']' returned non-zero exit status 128.

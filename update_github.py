@@ -1,112 +1,118 @@
-#!/usr/bin/env python3
-
-"""
-Script Name: update_git_website.py
-
-Description:
-This script automates the process of updating a GitHub repository for a website.
-It performs the following steps:
-1. Updates the remote URL of the GitHub repository to use the SSH protocol.
-2. Copies an updated HTML file (index.html) from a source directory to the target GitHub repository directory.
-3. Stages any new changes in the repository.
-4. Commits the changes with a pre-defined commit message, if there are any changes.
-5. Pushes the committed changes to the remote repository on GitHub.
-
-Additional Features:
-- Logs all operations and errors to a 'logs/commit.log' file in the script's directory.
-- Skips the commit step gracefully if there are no changes to commit.
-- Handles errors during the Git operations and logs them appropriately.
-
-Usage:
-- Ensure you have an SSH key configured for GitHub and update the `GIT_SSH_COMMAND` environment variable if needed.
-- Make sure the source file path and destination repository path are correct.
-
-Author: [Your Name]
-Date: [Date]
-
-"""
-
-import os
 import subprocess
-import shutil
 import logging
-from datetime import datetime
+import os
+import sys
 
-# Create logs directory if it does not exist
-LOG_DIR = os.path.join(os.path.dirname(__file__), "logs")
-os.makedirs(LOG_DIR, exist_ok=True)
-LOG_FILE = os.path.join(LOG_DIR, "commit.log")
-
-# Configure logging to both file and console
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[
-        logging.FileHandler(LOG_FILE),
-        logging.StreamHandler()
-    ]
-)
-
-# Set GIT_SSH_COMMAND to use your SSH key
-os.environ['GIT_SSH_COMMAND'] = 'ssh -i ~/.ssh/id_ed25519'
+# Configure logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 
 
-def update_remote_url():
+def run_command(command, check=True, capture_output=False):
+    """
+    Run a shell command and return the result.
+    Provides error handling and logging for subprocesses.
+    """
     try:
-        # Update the remote URL to SSH format
-        subprocess.run(
-            ["git", "remote", "set-url", "origin", "git@github.com:matt0164/matt0164.github.io.git"],
-            check=True
-        )
-        logging.info("Git remote URL updated to SSH format.")
+        logging.info(f"Running command: {' '.join(command)}")
+        result = subprocess.run(command, check=check, capture_output=capture_output, text=True)
+        if capture_output:
+            return result.stdout.strip()
     except subprocess.CalledProcessError as e:
-        logging.error(f"Error updating remote URL: {e}")
-        raise
+        logging.error(f"Command '{' '.join(command)}' failed with error: {e}")
+        sys.exit(1)  # Exit the script if a command fails
 
 
-def copy_html_file():
-    source_file = '/Users/mattalevy/PycharmProjects/snow-plots/html/index.html'
-    destination_file = '/Users/mattalevy/PycharmProjects/matt0164.github.io/index.html'
+def check_git_directory():
+    """
+    Check if the current directory is a Git repository.
+    """
+    if not os.path.exists(".git"):
+        logging.error("This directory is not a Git repository.")
+        sys.exit(1)
+
+
+def stage_changes():
+    """
+    Stage all changes in the repository.
+    """
+    run_command(["git", "add", "."])
+    logging.info("Staged all changes.")
+
+
+def commit_changes():
+    """
+    Commit changes if there are staged changes.
+    """
+    # Check if there are staged changes
+    status_result = subprocess.run(["git", "diff", "--cached", "--quiet"])
+    if status_result.returncode == 0:
+        logging.info("No changes to commit.")
+    else:
+        # Commit the staged changes
+        run_command(["git", "commit", "-m", "Automated commit"])
+        logging.info("Committed changes with message 'Automated commit'.")
+
+
+def pull_changes():
+    """
+    Pull from the remote repository with rebase.
+    """
     try:
-        shutil.copy(source_file, destination_file)
-        logging.info(f"Copied {source_file} to {destination_file}")
+        run_command(["git", "pull", "--rebase"])
+        logging.info("Pulled latest changes from the remote repository.")
+    except subprocess.CalledProcessError:
+        logging.error("Pull with rebase failed. Ensure your repository is synchronized.")
+        sys.exit(1)
+
+
+def push_changes():
+    """
+    Push committed changes to the remote repository.
+    """
+    try:
+        run_command(["git", "push"])
+        logging.info("Changes pushed successfully!")
+    except subprocess.CalledProcessError:
+        logging.error("Push failed. Please check your repository permissions or remote configuration.")
+        sys.exit(1)
+
+
+def handle_unstaged_changes():
+    """
+    Automatically detect and handle unstaged changes.
+    Always stages and commits the changes (no user input required).
+    """
+    result = subprocess.run(["git", "status", "--porcelain"], capture_output=True, text=True)
+    if result.stdout:
+        logging.info("Unstaged changes detected. Automatically staging and committing them.")
+        stage_changes()  # Stage all changes
+        commit_changes()  # Commit those changes
+    else:
+        logging.info("No unstaged changes found. Proceeding.")
+
+
+def main():
+    """
+    Automates the Git workflow: staging, committing, pulling, and pushing.
+    Includes error handling for unstaged changes and push failures.
+    """
+    try:
+        # Ensure the script is run in a Git repository
+        check_git_directory()
+
+        # Handle unstaged changes automatically
+        handle_unstaged_changes()
+
+        # Pull the latest changes
+        pull_changes()
+
+        # Push changes to the repository
+        push_changes()
+
     except Exception as e:
-        logging.error(f"Error copying file: {e}")
-        raise
-
-
-def commit_to_github():
-    # First update the remote URL to ensure SSH is being used
-    update_remote_url()
-
-    # Then, copy the HTML file before updating git
-    copy_html_file()
-
-    try:
-        # Stage all changes
-        subprocess.run(["git", "add", "."], check=True)
-        logging.info("Staged all changes.")
-
-        # Check if there are any staged changes before committing
-        # git diff --cached --quiet returns exit code 1 if there are changes
-        status_result = subprocess.run(
-            ["git", "diff", "--cached", "--quiet"],
-            check=False
-        )
-        if status_result.returncode == 0:
-            # No changes to commit
-            logging.info("No changes to commit.")
-        else:
-            # Commit the changes
-            subprocess.run(["git", "commit", "-m", "Automated commit"], check=True)
-            logging.info("Changes committed with message 'Automated commit'.")
-
-        # Push the changes
-        subprocess.run(["git", "push"], check=True)
-        logging.info("Changes successfully pushed to GitHub!")
-    except subprocess.CalledProcessError as e:
-        logging.error(f"An error occurred: {e}")
+        logging.error(f"An unexpected error occurred: {e}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":
-    commit_to_github()
+    main()
