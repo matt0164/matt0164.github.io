@@ -6,6 +6,19 @@ import shutil
 os.environ['GIT_SSH_COMMAND'] = 'ssh -i /Users/mattalevy/.ssh/id_ed25519'
 
 
+def update_remote_url():
+    try:
+        # Update the remote URL to SSH format
+        subprocess.run(
+            ["git", "remote", "set-url", "origin", "git@github.com:matt0164/matt0164.github.io.git"],
+            check=True
+        )
+        print("Git remote URL updated to SSH format.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error updating remote URL: {e}")
+        raise
+
+
 def copy_html_file():
     source_file = '/Users/mattalevy/PycharmProjects/snow-plots/html/index.html'
     destination_file = '/Users/mattalevy/PycharmProjects/matt0164.github.io/index.html'
@@ -18,11 +31,14 @@ def copy_html_file():
 
 
 def commit_to_github():
-    # First copy the HTML file prior to updating git
+    # First update the remote URL to ensure SSH is being used
+    update_remote_url()
+
+    # Then, copy the HTML file before updating git
     copy_html_file()
 
     try:
-        # Add all changes
+        # Stage all changes
         subprocess.run(["git", "add", "."], check=True)
 
         # Commit the changes
