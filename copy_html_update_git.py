@@ -3,7 +3,7 @@ import subprocess
 import shutil
 
 # Set GIT_SSH_COMMAND to use your SSH key
-os.environ['GIT_SSH_COMMAND'] = 'ssh -i /Users/mattalevy/PycharmProjects/snow-plots/id_ed25519'
+os.environ['GIT_SSH_COMMAND'] = 'ssh -i ~/.ssh/id_ed25519'
 
 def update_remote_url():
     try:
