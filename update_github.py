@@ -53,27 +53,16 @@ def commit_changes():
         logging.info("Committed changes with message 'Automated commit'.")
 
 
-def pull_changes():
-    """
-    Pull from the remote repository with rebase.
-    """
-    try:
-        run_command(["git", "pull", "--rebase"])
-        logging.info("Pulled latest changes from the remote repository.")
-    except subprocess.CalledProcessError:
-        logging.error("Pull with rebase failed. Ensure your repository is synchronized.")
-        sys.exit(1)
-
-
 def push_changes():
     """
-    Push committed changes to the remote repository.
+    Force push committed changes to the remote repository.
+    This will override remote changes with local changes.
     """
     try:
-        run_command(["git", "push"])
-        logging.info("Changes pushed successfully!")
+        run_command(["git", "push", "--force"])
+        logging.info("Force push executed successfully!")
     except subprocess.CalledProcessError:
-        logging.error("Push failed. Please check your repository permissions or remote configuration.")
+        logging.error("Force push failed. Please check your repository permissions or remote configuration.")
         sys.exit(1)
 
 
@@ -93,8 +82,7 @@ def handle_unstaged_changes():
 
 def main():
     """
-    Automates the Git workflow: staging, committing, pulling, and pushing.
-    Includes error handling for unstaged changes and push failures.
+    Automates the Git workflow: staging, committing, and force pushing local changes.
     """
     try:
         # Ensure the script is run in a Git repository
@@ -103,10 +91,7 @@ def main():
         # Handle unstaged changes automatically
         handle_unstaged_changes()
 
-        # Pull the latest changes
-        pull_changes()
-
-        # Push changes to the repository
+        # Force push changes to the remote repository (local changes always win)
         push_changes()
 
     except Exception as e:
