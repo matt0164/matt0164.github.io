@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_d913b9cf0c141ae53381f7245f4327a3 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+        
+</head>
+<body>
+    
+    
+        <h3 align="center" style="font-size:20px"><b>Wind Gust Reports (Last 48 Hours)</b></h3>
+        <p align="center" style="font-size:14px">Source: National Weather Service (NOAA) Public Information Statements</p>
+        <p align="center" style="font-size:14px">Not for commercial redistribution without credit to Emkay Ventures LLC</p>
+    
+    
+        <div style="position: fixed; bottom: 10px; right: 10px; background: white; padding: 5px; font-size: 12px; text-align: right;">
+            <b>Report covers:</b><br>
+            February 18, 2025 - February 18, 2025
+        </div>
+    
+    
+    <script>
+        function adjustWindIconSize() {
+            var currentZoom = map.getZoom();
+            // Define a base size and scale factor
+            var baseSize = 20; // base pixel size at zoom level 10
+            var scale = 1 + (currentZoom - 10) * 0.1;
+            var newSize = baseSize * scale;
+            // Select all FontAwesome wind icons in our custom markers
+            var icons = document.getElementsByClassName("fa-wind");
+            for (var i = 0; i < icons.length; i++) {
+                icons[i].style.fontSize = newSize + "px";
+            }
+        }
+        map.on("zoomend", adjustWindIconSize);
+        // Call once on load to set the initial icon sizes
+        adjustWindIconSize();
+    </script>
+    
+    
+            <div class="folium-map" id="map_d913b9cf0c141ae53381f7245f4327a3" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_d913b9cf0c141ae53381f7245f4327a3 = L.map(
+                "map_d913b9cf0c141ae53381f7245f4327a3",
+                {
+                    center: [42.89, -78.87],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 5,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_fb2306ea6a822567f9e10d38c3b76a74 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_fb2306ea6a822567f9e10d38c3b76a74.addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var marker_adc7db40052c54ef4db6f729369c5675 = L.marker(
+                [39.66, -78.95],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_a00ec06feb90f8def9dbf4425dcdb5f6 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_adc7db40052c54ef4db6f729369c5675.setIcon(div_icon_a00ec06feb90f8def9dbf4425dcdb5f6);
+        
+    
+            marker_adc7db40052c54ef4db6f729369c5675.bindTooltip(
+                `<div>
+                     -9 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_6863cd8293f56e37bb1fe75b3b8b33e2 = L.marker(
+                [39.68, -78.93],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_a3b7b9934072c98f4cd689c19ab74c64 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_6863cd8293f56e37bb1fe75b3b8b33e2.setIcon(div_icon_a3b7b9934072c98f4cd689c19ab74c64);
+        
+    
+            marker_6863cd8293f56e37bb1fe75b3b8b33e2.bindTooltip(
+                `<div>
+                     -8 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_cbdf4643182957fabeb9836f872e8468 = L.marker(
+                [39.69, -79.01],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_6e75d00f558aa5f46dcf01ec91cdd47d = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_cbdf4643182957fabeb9836f872e8468.setIcon(div_icon_6e75d00f558aa5f46dcf01ec91cdd47d);
+        
+    
+            marker_cbdf4643182957fabeb9836f872e8468.bindTooltip(
+                `<div>
+                     -20 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_396e9632ff3f6b7593c9d26444ea3cde = L.marker(
+                [39.69, -79.25],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_8769b25ddabf8f4ecbe850f31b06833b = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_396e9632ff3f6b7593c9d26444ea3cde.setIcon(div_icon_8769b25ddabf8f4ecbe850f31b06833b);
+        
+    
+            marker_396e9632ff3f6b7593c9d26444ea3cde.bindTooltip(
+                `<div>
+                     -17 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_21ae829d15476d94c408ea9d819ba90e = L.marker(
+                [39.66, -79.3],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_b5b2aca2efb7e4e1a002020624e64085 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_21ae829d15476d94c408ea9d819ba90e.setIcon(div_icon_b5b2aca2efb7e4e1a002020624e64085);
+        
+    
+            marker_21ae829d15476d94c408ea9d819ba90e.bindTooltip(
+                `<div>
+                     -17 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_3791b1b02a22109b7c01761e10d09499 = L.marker(
+                [39.58, -79.33],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_053a511d5f1fd2d01fee5d7a1a59b870 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_3791b1b02a22109b7c01761e10d09499.setIcon(div_icon_053a511d5f1fd2d01fee5d7a1a59b870);
+        
+    
+            marker_3791b1b02a22109b7c01761e10d09499.bindTooltip(
+                `<div>
+                     -15 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_ab6b963ebb56d3222cab45fb109b33a2 = L.marker(
+                [39.56, -79.36],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_78a25aaf59c7b6279dd3c0d93f278ee2 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_ab6b963ebb56d3222cab45fb109b33a2.setIcon(div_icon_78a25aaf59c7b6279dd3c0d93f278ee2);
+        
+    
+            marker_ab6b963ebb56d3222cab45fb109b33a2.bindTooltip(
+                `<div>
+                     -13 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_c229e071308213791577a69a457fcc09 = L.marker(
+                [39.66, -79.45],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_c5e836d36da40fc1795743e1b4509b7e = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_c229e071308213791577a69a457fcc09.setIcon(div_icon_c5e836d36da40fc1795743e1b4509b7e);
+        
+    
+            marker_c229e071308213791577a69a457fcc09.bindTooltip(
+                `<div>
+                     -8 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_80c2df55cfc404587398304df2a8d582 = L.marker(
+                [38.46, -79.69],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_79d2ad987546bffd3547bd9bb7e7363c = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_80c2df55cfc404587398304df2a8d582.setIcon(div_icon_79d2ad987546bffd3547bd9bb7e7363c);
+        
+    
+            marker_80c2df55cfc404587398304df2a8d582.bindTooltip(
+                `<div>
+                     -7 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_0b7b00d06570cad9a48ad756d467fd36 = L.marker(
+                [39.08, -79.3],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_8dc65e6d30d582364c58b85204a9423e = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_0b7b00d06570cad9a48ad756d467fd36.setIcon(div_icon_8dc65e6d30d582364c58b85204a9423e);
+        
+    
+            marker_0b7b00d06570cad9a48ad756d467fd36.bindTooltip(
+                `<div>
+                     -22 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_b882430a90d4f3c03a305261074b0c51 = L.marker(
+                [39.18, -79.26],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_3c03755d5111b68596ab51f3038cf2c4 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_b882430a90d4f3c03a305261074b0c51.setIcon(div_icon_3c03755d5111b68596ab51f3038cf2c4);
+        
+    
+            marker_b882430a90d4f3c03a305261074b0c51.bindTooltip(
+                `<div>
+                     -11 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_f9424f0b1afa2df668828b68802c43ce = L.marker(
+                [39.29, -79.22],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_59e54299026e5a9da635fe21bb701416 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_f9424f0b1afa2df668828b68802c43ce.setIcon(div_icon_59e54299026e5a9da635fe21bb701416);
+        
+    
+            marker_f9424f0b1afa2df668828b68802c43ce.bindTooltip(
+                `<div>
+                     -7 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_fdf1ce3f48761f29826fa780dfc424cc = L.marker(
+                [40.7667, -79.95],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_a90e4ab88c4de248d28d2504f6743093 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_fdf1ce3f48761f29826fa780dfc424cc.setIcon(div_icon_a90e4ab88c4de248d28d2504f6743093);
+        
+    
+            marker_fdf1ce3f48761f29826fa780dfc424cc.bindTooltip(
+                `<div>
+                     -11 mph<br>2/18 12AM<br>PBZ
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_e681748070d80f261b2ba787ee533d38 = L.marker(
+                [40.8156, -79.0724],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_6895ead60e8cad578658e20753036310 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_e681748070d80f261b2ba787ee533d38.setIcon(div_icon_6895ead60e8cad578658e20753036310);
+        
+    
+            marker_e681748070d80f261b2ba787ee533d38.bindTooltip(
+                `<div>
+                     -10 mph<br>2/18 12AM<br>PBZ
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_b09278da92c89d291c2ed8d86edbeea6 = L.marker(
+                [40.6167, -79.0833],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_4d4d752df72ba928f3158632a63794f2 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_b09278da92c89d291c2ed8d86edbeea6.setIcon(div_icon_4d4d752df72ba928f3158632a63794f2);
+        
+    
+            marker_b09278da92c89d291c2ed8d86edbeea6.bindTooltip(
+                `<div>
+                     -10 mph<br>2/18 12AM<br>PBZ
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_6dc9cbc4a17ca15ee76b3f0c68e7c9fe = L.marker(
+                [40.4519, -79.1562],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_171d36acc4be2e32beb2d436e194c7d7 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_6dc9cbc4a17ca15ee76b3f0c68e7c9fe.setIcon(div_icon_171d36acc4be2e32beb2d436e194c7d7);
+        
+    
+            marker_6dc9cbc4a17ca15ee76b3f0c68e7c9fe.bindTooltip(
+                `<div>
+                     -10 mph<br>2/18 12AM<br>PBZ
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_a4a4e80e07d53aa7eea5fdbc877b15a4 = L.marker(
+                [41.1667, -78.9],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_bdfa2304acda661f8169aa4ed4785373 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_a4a4e80e07d53aa7eea5fdbc877b15a4.setIcon(div_icon_bdfa2304acda661f8169aa4ed4785373);
+        
+    
+            marker_a4a4e80e07d53aa7eea5fdbc877b15a4.bindTooltip(
+                `<div>
+                     -11 mph<br>2/18 12AM<br>PBZ
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_7420b29ffcb0ef4b4f7d6c6bf4683c07 = L.marker(
+                [41.1523, -78.9101],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_bebf18e2656fd7928439534aae8ebf1a = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_7420b29ffcb0ef4b4f7d6c6bf4683c07.setIcon(div_icon_bebf18e2656fd7928439534aae8ebf1a);
+        
+    
+            marker_7420b29ffcb0ef4b4f7d6c6bf4683c07.bindTooltip(
+                `<div>
+                     -10 mph<br>2/18 12AM<br>PBZ
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_dac1894e7231c5c182352531d6fb3873 = L.marker(
+                [41.3667, -79.8667],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_fbc1a9beb31b1c838dbdc82e7c7b7849 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_dac1894e7231c5c182352531d6fb3873.setIcon(div_icon_fbc1a9beb31b1c838dbdc82e7c7b7849);
+        
+    
+            marker_dac1894e7231c5c182352531d6fb3873.bindTooltip(
+                `<div>
+                     -12 mph<br>2/18 12AM<br>PBZ
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_172ddd14eb51c00671104fd638ff1939 = L.marker(
+                [39.0502, -79.3847],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_64c9f36ea8ff2db5c90b38b3e75e6109 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_172ddd14eb51c00671104fd638ff1939.setIcon(div_icon_64c9f36ea8ff2db5c90b38b3e75e6109);
+        
+    
+            marker_172ddd14eb51c00671104fd638ff1939.bindTooltip(
+                `<div>
+                     -10 mph<br>2/18 12AM<br>PBZ
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_97f394becf1a931029c99631e62b99f1 = L.marker(
+                [34.4598, -103.2017],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_6a2e99e509ce7e9bb18218e0ee2aef1a = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:red;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_97f394becf1a931029c99631e62b99f1.setIcon(div_icon_6a2e99e509ce7e9bb18218e0ee2aef1a);
+        
+    
+            marker_97f394becf1a931029c99631e62b99f1.bindTooltip(
+                `<div>
+                     40 mph<br>2/18 12AM<br>ABQ
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_2c3f2a6d6bfd6ca819058b5547e81670 = L.marker(
+                [39.68, -78.93],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_0fb471b30f923d34add5109c3a02df1f = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_2c3f2a6d6bfd6ca819058b5547e81670.setIcon(div_icon_0fb471b30f923d34add5109c3a02df1f);
+        
+    
+            marker_2c3f2a6d6bfd6ca819058b5547e81670.bindTooltip(
+                `<div>
+                     -10 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_87bf966156f662b9956206ab62dd859d = L.marker(
+                [39.65, -77.47],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_e1cec5073976128fd1fbb418da8a4e0d = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_87bf966156f662b9956206ab62dd859d.setIcon(div_icon_e1cec5073976128fd1fbb418da8a4e0d);
+        
+    
+            marker_87bf966156f662b9956206ab62dd859d.bindTooltip(
+                `<div>
+                     -8 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_b9b70e72afeb25963019ae4409d7dd19 = L.marker(
+                [39.69, -79.01],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_b9553805993f6cf33a336be401c8931c = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_b9b70e72afeb25963019ae4409d7dd19.setIcon(div_icon_b9553805993f6cf33a336be401c8931c);
+        
+    
+            marker_b9b70e72afeb25963019ae4409d7dd19.bindTooltip(
+                `<div>
+                     -21 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_c93fd8ed1ff96b79601c0f1c623adefe = L.marker(
+                [39.66, -79.3],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_5be3000d595c917b6f4700168a398a96 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_c93fd8ed1ff96b79601c0f1c623adefe.setIcon(div_icon_5be3000d595c917b6f4700168a398a96);
+        
+    
+            marker_c93fd8ed1ff96b79601c0f1c623adefe.bindTooltip(
+                `<div>
+                     -19 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_20b799a3343fabad3dcc76a34df02d74 = L.marker(
+                [39.69, -79.25],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_1cc2f7d0533cdbbc24b346a709d38eb5 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_20b799a3343fabad3dcc76a34df02d74.setIcon(div_icon_1cc2f7d0533cdbbc24b346a709d38eb5);
+        
+    
+            marker_20b799a3343fabad3dcc76a34df02d74.bindTooltip(
+                `<div>
+                     -17 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_375c7de790eb82788114881c35166171 = L.marker(
+                [39.56, -79.36],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_d5dc1a6cdd1e41a3f16b5d5552904024 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_375c7de790eb82788114881c35166171.setIcon(div_icon_d5dc1a6cdd1e41a3f16b5d5552904024);
+        
+    
+            marker_375c7de790eb82788114881c35166171.bindTooltip(
+                `<div>
+                     -16 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_d9c66fa80090421739b86d08c24184d8 = L.marker(
+                [39.58, -79.33],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_bc73b5f62aa6970c2dcba172a8a9bc73 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_d9c66fa80090421739b86d08c24184d8.setIcon(div_icon_bc73b5f62aa6970c2dcba172a8a9bc73);
+        
+    
+            marker_d9c66fa80090421739b86d08c24184d8.bindTooltip(
+                `<div>
+                     -16 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_ece8f23fb3588e01a4fe1aeb1d162045 = L.marker(
+                [39.66, -79.45],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_a6d5a0a0692691d8aea3d14dbe5f3832 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_ece8f23fb3588e01a4fe1aeb1d162045.setIcon(div_icon_a6d5a0a0692691d8aea3d14dbe5f3832);
+        
+    
+            marker_ece8f23fb3588e01a4fe1aeb1d162045.bindTooltip(
+                `<div>
+                     -9 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_c3425f26565a65ef736889985a516970 = L.marker(
+                [38.46, -79.69],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_5285e80b6587d1f05fe49a7e889f1f4d = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_c3425f26565a65ef736889985a516970.setIcon(div_icon_5285e80b6587d1f05fe49a7e889f1f4d);
+        
+    
+            marker_c3425f26565a65ef736889985a516970.bindTooltip(
+                `<div>
+                     -7 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_f147160978735401631995cbea0ace7e = L.marker(
+                [39.08, -79.3],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_83849e16599b569652936e3e925d596c = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_f147160978735401631995cbea0ace7e.setIcon(div_icon_83849e16599b569652936e3e925d596c);
+        
+    
+            marker_f147160978735401631995cbea0ace7e.bindTooltip(
+                `<div>
+                     -23 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_bcedc388379c983c7695dac78772052b = L.marker(
+                [39.18, -79.26],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_4d2f6ee6e8eb590bab44c3e5b04933de = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_bcedc388379c983c7695dac78772052b.setIcon(div_icon_4d2f6ee6e8eb590bab44c3e5b04933de);
+        
+    
+            marker_bcedc388379c983c7695dac78772052b.bindTooltip(
+                `<div>
+                     -13 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_4f9836cacaf9e6b41abb3cd671625fe8 = L.marker(
+                [39.08, -79.34],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_3016567fc06a97ddce5dfb01bd252c6e = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_4f9836cacaf9e6b41abb3cd671625fe8.setIcon(div_icon_3016567fc06a97ddce5dfb01bd252c6e);
+        
+    
+            marker_4f9836cacaf9e6b41abb3cd671625fe8.bindTooltip(
+                `<div>
+                     -9 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_8c6743393ff3989f04982750e8c40f6e = L.marker(
+                [38.69, -79.54],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_a5a53e034f6fe01a6073a473a8a18824 = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_8c6743393ff3989f04982750e8c40f6e.setIcon(div_icon_a5a53e034f6fe01a6073a473a8a18824);
+        
+    
+            marker_8c6743393ff3989f04982750e8c40f6e.bindTooltip(
+                `<div>
+                     -15 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+            var marker_c3254779f3ad2fb58b38a1fd9f752e5d = L.marker(
+                [38.61, -79.48],
+                {
+}
+            ).addTo(map_d913b9cf0c141ae53381f7245f4327a3);
+        
+    
+            var div_icon_9d84a71e41780ca34b8070b43ce969bc = L.divIcon({
+  "html": "\n            \u003cdiv class=\"wind-icon\" style=\"color:blue;\"\u003e\n                \u003ci class=\"fa fa-wind\"\u003e\u003c/i\u003e\n            \u003c/div\u003e\n        ",
+  "iconSize": [20, 20],
+  "className": "custom-div-icon",
+});
+            marker_c3254779f3ad2fb58b38a1fd9f752e5d.setIcon(div_icon_9d84a71e41780ca34b8070b43ce969bc);
+        
+    
+            marker_c3254779f3ad2fb58b38a1fd9f752e5d.bindTooltip(
+                `<div>
+                     -10 mph<br>2/18 12AM<br>LWX
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+</script>
+</html>
