@@ -1,64 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Storm Maps Home</title>
+  <meta charset="UTF-8">
+  <title>Storm Map Controls</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
       display: flex;
       height: 100vh;
-      font-family: Arial, sans-serif;
+      margin: 0;
     }
-    /* Left control panel: 20% width */
     #controls {
-      width: 19%;
+      width: 20%;
       padding: 1em;
       background: #f4f4f4;
-      box-sizing: border-box;
-      overflow-y: auto;
-      border-right: 1px solid #ccc;
-    }
-    #controls h1, #controls h2, #controls label, #controls select, #controls button, #controls input {
-      display: block;
-      margin-bottom: 1em;
-      width: 100%;
-    }
-    /* Map container: 80% width and relative positioning for overlay */
-    #mapContainer {
-      width: 80%;
-      height: 100%;
-      box-sizing: border-box;
-      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
     #mapFrame {
-      width: 100%;
-      height: 100%;
+      width: 80%;
       border: none;
+      position: relative;
     }
-    /* Overlay styling */
-    #mapOverlay {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: rgba(0,0,0,0.5);
-      color: #fff;
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-size: 14px;
-      z-index: 1000;
+    label {
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <div id="controls">
-    <h1>Select a Storm Map</h1>
 
-    <label for="typeSelect">Select Map Type:</label>
-    <select id="typeSelect">
-      <option value="">-- Select Map Type --</option>
-      <option value="snow" selected>Snow Map</option>
+  <div id="controls">
+    <h2>Map Controls</h2>
+
+    <label for="mapType">Select Map Type:</label>
+    <select id="mapType">
+      <option value="snow">Snow Map</option>
       <option value="wind">Wind Map</option>
     </select>
 
@@ -67,308 +43,101 @@
       <option value="">-- Select a Date --</option>
     </select>
 
-    <label for="hourSelect">Select a Time:</label>
-    <select id="hourSelect">
+    <label for="timeSelect">Select a Time:</label>
+    <select id="timeSelect">
       <option value="">-- Select a Time --</option>
     </select>
 
-    <button onclick="navigate()">Go</button>
+    <label for="latitude">Latitude:</label>
+    <input type="number" id="latitude" value="38.9072" step="0.0001">
 
-    <hr>
+    <label for="longitude">Longitude:</label>
+    <input type="number" id="longitude" value="-77.0369" step="0.0001">
 
-    <h2>Animation Controls</h2>
-    <label for="timerSlider">Animation Speed (seconds): <span id="timerValue">2</span></label>
-    <input type="range" id="timerSlider" min="0.5" max="5" step="0.1" value="2">
-    <button onclick="startAnimation()">Start Animation</button>
-    <button onclick="stopAnimation()">Stop Animation</button>
+    <label for="zoomLevel">Zoom Level:</label>
+    <input type="number" id="zoomLevel" value="5" min="1" max="19">
 
-    <hr>
+    <button onclick="updateMap()">Update Map</button>
 
-    <h2>Map Settings</h2>
-    <label for="zoomSelect">Zoom Level: <span id="zoomValue">10</span></label>
-    <input type="range" id="zoomSelect" min="5" max="20" step="1" value="10">
   </div>
 
-  <div id="mapContainer">
-    <div id="mapOverlay"></div>
-    <iframe id="mapFrame" src=""></iframe>
-  </div>
+  <iframe id="mapFrame" src="html/index.html"></iframe>
 
   <script>
-    // List of storm map files based on project_structure.txt
+    const mapType = document.getElementById("mapType");
+    const dateSelect = document.getElementById("dateSelect");
+    const timeSelect = document.getElementById("timeSelect");
+    const latitudeInput = document.getElementById("latitude");
+    const longitudeInput = document.getElementById("longitude");
+    const zoomLevelInput = document.getElementById("zoomLevel");
+    const mapFrame = document.getElementById("mapFrame");
+
+    // List of storm map files (to be dynamically generated based on your data)
     const stormFiles = [
       "html/snow_25_02_16_14.html",
       "html/snow_25_02_15_04.html",
-      "html/snow_25_02_16_02.html",
-      "html/snow_25_02_17_03.html",
-      "html/snow_25_02_13_17.html",
-      "html/snow_25_02_13_21.html",
-      "html/snow_25_02_15_08.html",
-      "html/snow_25_02_16_18.html",
-      "html/snow_25_02_16_22.html",
-      "html/snow_25_02_16_23.html",
-      "html/snow_25_02_16_19.html",
-      "html/snow_25_02_15_09.html",
-      "html/snow_25_02_13_16.html",
-      "html/snow_25_02_17_02.html",
       "html/wind_25_02_18_16.html",
-      "html/snow_25_02_15_13.html",
-      "html/snow_25_02_16_03.html",
-      "html/snow_25_02_16_15.html",
-      "html/snow_25_02_14_23.html",
-      "html/snow_25_02_16_08.html",
-      "html/snow_25_02_18_16.html",
-      "html/snow_25_02_14_19.html",
-      "html/snow_25_02_15_22.html",
-      "html/snow_25_02_16_12.html",
-      "html/snow_25_02_15_02.html",
-      "html/snow_25_02_16_04.html",
-      "html/snow_25_02_15_14.html",
-      "html/snow_25_02_17_05.html",
-      "html/snow_25_02_13_11.html",
-      "html/snow_25_02_13_06.html",
-      "html/snow_25_02_13_10.html",
-      "html/snow_25_02_17_04.html",
-      "html/snow_25_02_15_15.html",
-      "html/snowfall_markers_February_12_2025.html",
-      "html/snow_25_02_16_05.html",
-      "html/snow_25_02_15_03.html",
-      "html/snow_25_02_16_13.html",
-      "html/snow_25_02_15_23.html",
-      "html/snow_25_02_16_09.html",
-      "html/snow_25_02_14_22.html",
-      "html/snow_25_02_15_20.html",
-      "html/snow_25_02_13_09.html",
-      "html/snow_25_02_18_14.html",
-      "html/snow_25_02_14_21.html",
-      "html/wind_25_02_18_09.html",
-      "html/snow_25_02_13_05.html",
-      "html/snow_25_02_13_13.html",
-      "html/wind_25_02_18_13.html",
-      "html/snow_25_02_15_16.html",
-      "html/snow_25_02_16_06.html",
-      "html/snow_25_02_15_00.html",
-      "html/snow_25_02_16_10.html",
-      "html/snow_25_02_16_11.html",
-      "html/snow_25_02_15_01.html",
-      "html/snowfall_markers_February_11_2025.html",
-      "html/snow_25_02_13_12.html",
-      "html/snow_25_02_14_20.html",
-      "html/snow_25_02_18_15.html",
-      "html/wind_25_02_17_17.html",
-      "html/snow_25_02_13_08.html",
-      "html/snow_25_02_15_21.html",
-      "html/snow_25_02_13_15.html",
-      "html/snow_25_02_17_01.html",
-      "html/wind_25_02_18_15.html",
-      "html/snow_25_02_15_10.html",
-      "html/snow_25_02_16_00.html",
-      "html/snow_25_02_15_06.html",
-      "html/snow_25_02_16_16.html",
-      "html/snow_25_02_16_20.html",
-      "html/snow_25_02_18_13.html",
-      "html/snow_25_02_16_21.html",
-      "html/snow_25_02_18_09.html",
-      "html/snow_25_02_15_07.html",
-      "html/snow_25_02_16_01.html",
-      "html/snow_25_02_15_11.html",
-      "html/wind_25_02_18_14.html",
-      "html/snow_25_02_17_00.html"
+      "html/snow_25_02_17_03.html"
+      // Add more dynamically
     ];
 
-    const months = {
-      "01": "Jan", "02": "Feb", "03": "Mar", "04": "Apr",
-      "05": "May", "06": "Jun", "07": "Jul", "08": "Aug",
-      "09": "Sep", "10": "Oct", "11": "Nov", "12": "Dec"
-    };
+    // Extract available dates and times
+    function populateDropdowns() {
+      const dateMap = {};
 
-    window.currentDateMap = {};
-    let animationList = [];
-    let animationInterval;
-    let animationIndex = 0;
-
-    const typeSelect = document.getElementById("typeSelect");
-    const dateSelect = document.getElementById("dateSelect");
-    const hourSelect = document.getElementById("hourSelect");
-    const mapFrame = document.getElementById("mapFrame");
-    const timerSlider = document.getElementById("timerSlider");
-    const timerValue = document.getElementById("timerValue");
-    const zoomSelect = document.getElementById("zoomSelect");
-    const zoomValue = document.getElementById("zoomValue");
-    const mapOverlay = document.getElementById("mapOverlay");
-
-    typeSelect.addEventListener("change", () => {
-      updateDateDropdown();
-      buildAnimationList();
-      loadDefaultMap();
-    });
-    dateSelect.addEventListener("change", updateTimeDropdown);
-    timerSlider.addEventListener("input", () => {
-      timerValue.textContent = timerSlider.value;
-    });
-    zoomSelect.addEventListener("input", () => {
-      zoomValue.textContent = zoomSelect.value;
-      setMapZoom();
-    });
-
-    window.onload = function() {
-      typeSelect.value = "snow";
-      updateDateDropdown();
-      buildAnimationList();
-      loadDefaultMap();
-    };
-
-    // Use postMessage to set the zoom on the embedded map.
-    mapFrame.onload = function() {
-      setMapZoom();
-      // Also update the overlay with the current file info.
-      updateOverlay(mapFrame.src);
-    };
-
-    function setMapZoom() {
-      const zoomLevel = parseInt(zoomSelect.value);
-      mapFrame.contentWindow.postMessage({ type: "setZoom", zoom: zoomLevel }, "*");
-    }
-
-    // Parse a file name (without path or .html) and return a formatted string.
-    function parseFileName(filename) {
-      const parts = filename.split('_');
-      if(parts.length === 5) {
-        const type = parts[0];
-        const year = "20" + parts[1];
-        const month = months[parts[2]];
-        const day = parts[3];
-        const hour = parts[4];
-        return `${type.charAt(0).toUpperCase() + type.slice(1)} Map: ${month} ${day}, ${year} ${hour}:00`;
-      }
-      return filename;
-    }
-
-    // Update the overlay text based on the currently loaded file.
-    function updateOverlay(filePath) {
-      if (!filePath) return;
-      // Extract the file name from the path
-      const parts = filePath.split('/');
-      const filenameWithExt = parts[parts.length - 1];
-      const filename = filenameWithExt.replace('.html', '');
-      mapOverlay.textContent = parseFileName(filename);
-    }
-
-    function updateDateDropdown() {
-      const selectedType = typeSelect.value;
-      dateSelect.innerHTML = '<option value="">-- Select a Date --</option>';
-      hourSelect.innerHTML = '<option value="">-- Select a Time --</option>';
-      if (!selectedType) return;
-
-      const filteredFiles = stormFiles.filter(file => {
-        let filename = file.split('/').pop();
-        return filename.startsWith(selectedType + '_');
-      });
-
-      const newDateMap = {};
-      filteredFiles.forEach(file => {
-        let filename = file.split('/').pop().replace('.html', '');
-        const parts = filename.split('_');
+      stormFiles.forEach(file => {
+        const parts = file.split("_");
         if (parts.length === 5) {
-          let year = "20" + parts[1];
-          let monthNum = parts[2];
-          let day = parts[3];
-          let hour = parts[4];
-          let dateLabel = months[monthNum] + " " + day + ", " + year;
-          let timeLabel = hour + ":00";
-          if (!newDateMap[dateLabel]) {
-            newDateMap[dateLabel] = [];
-          }
-          newDateMap[dateLabel].push({ time: timeLabel, file, hour: parseInt(hour) });
+          const type = parts[0].replace("html/", "");
+          const date = `${parts[1]}-${parts[2]}-${parts[3]}`;
+          const time = `${parts[4].replace(".html", "")}:00`;
+
+          if (!dateMap[date]) dateMap[date] = [];
+          dateMap[date].push({ time, file });
         }
       });
 
-      window.currentDateMap = newDateMap;
-      let sortedDates = Object.keys(newDateMap).sort((a, b) => new Date(a) - new Date(b));
-      sortedDates.forEach(date => {
-        let option = document.createElement("option");
+      dateSelect.innerHTML = '<option value="">-- Select a Date --</option>';
+      Object.keys(dateMap).forEach(date => {
+        const option = document.createElement("option");
         option.value = date;
-        option.text = date;
+        option.textContent = date;
         dateSelect.appendChild(option);
       });
-    }
 
-    function updateTimeDropdown() {
-      const selectedDate = dateSelect.value;
-      hourSelect.innerHTML = '<option value="">-- Select a Time --</option>';
-      if (window.currentDateMap[selectedDate]) {
-        let entries = window.currentDateMap[selectedDate];
-        entries.sort((a, b) => a.hour - b.hour);
-        entries.forEach(entry => {
-          let opt = document.createElement("option");
-          opt.value = entry.file;
-          opt.text = entry.time;
-          hourSelect.appendChild(opt);
-        });
-      }
-    }
-
-    function buildAnimationList() {
-      const selectedType = typeSelect.value;
-      if (!selectedType) {
-        animationList = [];
-        return;
-      }
-      let filteredFiles = stormFiles.filter(file => {
-        let filename = file.split('/').pop();
-        return filename.startsWith(selectedType + '_');
-      });
-      let list = [];
-      filteredFiles.forEach(file => {
-        let filename = file.split('/').pop().replace('.html', '');
-        const parts = filename.split('_');
-        if (parts.length === 5) {
-          let year = parseInt("20" + parts[1]);
-          let month = parseInt(parts[2]);
-          let day = parseInt(parts[3]);
-          let hour = parseInt(parts[4]);
-          let dateObj = new Date(year, month - 1, day, hour);
-          list.push({ file, datetime: dateObj });
+      dateSelect.addEventListener("change", () => {
+        timeSelect.innerHTML = '<option value="">-- Select a Time --</option>';
+        const selectedDate = dateSelect.value;
+        if (dateMap[selectedDate]) {
+          dateMap[selectedDate].forEach(entry => {
+            const option = document.createElement("option");
+            option.value = entry.file;
+            option.textContent = entry.time;
+            timeSelect.appendChild(option);
+          });
         }
       });
-      animationList = list.sort((a, b) => a.datetime - b.datetime);
-      animationIndex = 0;
     }
 
-    // Load the latest map file (last element in sorted animation list)
-    function loadDefaultMap() {
-      if (animationList.length > 0) {
-        const latestFile = animationList[animationList.length - 1].file;
-        mapFrame.src = latestFile;
-        updateOverlay(latestFile);
+    // Update the map view with selected settings
+    function updateMap() {
+      const selectedFile = timeSelect.value;
+      if (!selectedFile) {
+        alert("Please select a valid map.");
+        return;
       }
+
+      // Construct URL with query parameters
+      const lat = latitudeInput.value;
+      const lon = longitudeInput.value;
+      const zoom = zoomLevelInput.value;
+      const newUrl = `${selectedFile}?lat=${lat}&lon=${lon}&zoom=${zoom}`;
+
+      mapFrame.src = newUrl;
     }
 
-    function navigate() {
-      const file = hourSelect.value;
-      if (file) {
-        mapFrame.src = file;
-        updateOverlay(file);
-      }
-    }
-
-    function startAnimation() {
-      if (animationList.length === 0) return;
-      stopAnimation();
-      let delay = parseFloat(timerSlider.value) * 1000;
-      animationInterval = setInterval(() => {
-        const file = animationList[animationIndex].file;
-        mapFrame.src = file;
-        updateOverlay(file);
-        animationIndex = (animationIndex + 1) % animationList.length;
-      }, delay);
-    }
-
-    function stopAnimation() {
-      if (animationInterval) {
-        clearInterval(animationInterval);
-      }
-    }
+    populateDropdowns();
   </script>
+
 </body>
 </html>
